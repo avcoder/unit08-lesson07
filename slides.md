@@ -17,11 +17,11 @@ mdc: true
 ---
 
 # React Native
-Mobile Development: Unit 08 - Lesson 01
+Mobile Development: Unit 08 - Lesson 07
 
-- [ ] Aspects to Consider when Designing for Mobile
-- [ ] MacOS vs Android
-- [ ] Install Expo Go App on your phone
+- [ ] Fetch JSON via: useEffect, RTK Query
+- [ ] Zustand
+- [ ] Continue playing with expo APIs: Maps, 
 
 <div class="abs-br m-6 text-xl">
   <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
@@ -36,328 +36,282 @@ Mobile Development: Unit 08 - Lesson 01
 transition: slide-left
 ---
 
-# Aspects to Consider 
+# Recap
 
-- Designing for smaller screens means limited input types
-- Must use responsive design to avoid clutter
-- Input Types include touch, gestures, voice (due to no keyboard/mouse)
-- Accessibility: High contrast, readable fonts, screen reader support
-- 2 Major Ways to build mobile apps:
-   - Native: Platform specific (ex: Swift for Mac vs Kotlin/Java for Android)
-   - Cross-Platform: One codebase for both (ex: React Native, Flutter)
-- What kind of phone do you have to test with?
-
----
-transition: slide-left
----
-
-# Set up Default React Native project (pg.1)
-
-- Install Expo Go > if it asks to find/connect to devices on your local network > Allow
-- `npx create-expo-app --help` (OK to proceed? say yes)
-- `npx create-expo-app helloworld`
-- Once you see `✅ Your project is ready` then:
-   - `cd helloworld`
-   - go to package.json to find out how to start via `npm`
-   - fyi: How can I start it without using `npm`? 
-
----
-transition: slide-left
-layout: two-cols
----
-
-# Set up Default React Native project (pg.2)
-
-- a QR code comes up, scan it with your phone that already has Expo Go installed; should eventually see -->
-
-## Exercise
-- Take a moment to explore and poke around the folders/files
-- Try changing `Welcome!` to `Hello World`
-- Take 5 minutes and satisfy your curiosity
-   - keep poking around, change/break stuff
-- Report one thing you've discovered with the rest of the class in Zoom chat
-
-::right::
-
+- lab tmrw
+- fyi: next week Tues
+1. To deploy to stores, Get a developer account:
+   - Apple: $99 per year
+   - Google: one time fee $25
+   - business account: must provide proof
+   - individual account: if you charge for your app, your personal address will be made public
+- Recommendation: if you charge for your app (or even in-app purchases) use business account so you can use a PO box for your address
+- Difference: Must pay $25 to Google when ready to deploy to stores vs Must pay $99 to Apple just to generate certificates to run on physical device
+2. Deploy to App Store either via: Xcode, Transporter app, `eas submit` > creates app on App Store Connect
+  - and/or Upload to Google Play Console, along with screenshots
 
 ---
 transition: slide-left
 ---
 
-# Set up BLANK React Native project
+# Splash screen
 
-- `npx create-expo-app note-app -t`
-   - choose Blank (TS) when prompted
-- `cd note-app`
-- `npm start`
-- scan QR code > should see app via Expo Go 
-   - if using iPhone: use camera app to scan QR code
-   - if using Android: use Expo Go app to scan QR code
-   - ensure phone is connected on same wi-fi as your computer
+- Once you are using a developing build and not Expo Go, you can now customize the splash screen and app icon.  All we need to do is configure the updated assets in app.json, prebuild, rebuild.
+- Can create app icon via tools like Figma etc. but need to be a specific size
+  - see https://www.figma.com/community/file/1155362909441341285/expo-app-icon-splash
+- Splash screen must be `1284 x 2778` which will be displayed when app first launches
+  - Replace existing `assets/splash.png` with your new Figma one
+- App icon in iOS: `1024 x 1024` png, no transparency
+  - Replace `assets/icon.png`
+- App icon in Android `1024 x 1024` png, should have either transparency or solid background
+  - Replace `assets/adaptive-icon.png`
+- Update app name in package.json under expo > name
+- Prebuild via `npx expo prebuild --platform ios --clean` (or replace ios with android)
+- Rebuild with `npx expo run:ios` (or replace ios with android)
 
+---
+transition: slide-left
+---
+
+# Install a UI framework for React-Native
+
+- Create a new React-Native project `npx create-expo-app helloworld`
+- Installing either:
+   - https://reactnativepaper.com/
+   - https://reactnativeelements.com/
+   
+---
+transition: slide-left
+---
+
+# Video Recording
+Record and play videos  
+
+- `npx expo install expo-video`
+- see https://docs.expo.dev/versions/latest/sdk/video/
+
+```tsx
+import { useEvent } from 'expo';
+import { useVideoPlayer, VideoView } from 'expo-video';
+
+const videoSource =
+  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+export default function VideoScreen() {
+  const player = useVideoPlayer(videoSource, player => {
+    player.loop = true;
+    player.play();
+  });
+
+  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+...
+<VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
+   ...
+   onPress={() => { isPlaying ? player.pause() : player.play() }}
+```
 
 
 ---
 transition: slide-left
 ---
 
-# Set up Blank React Native project
+# Media Library Access
 
-- Question: How can I inspect/debug on mobile?
-   - Answer #1 try shaking your phone
-   - Answer #2 try 3 touch hold - iOS only > reveals debug menu
+- `npx expo install expo-media-library`
+- see https://docs.expo.dev/versions/latest/sdk/media-library/
+```tsx
+import * as MediaLibrary from 'expo-media-library';
 
-## Exercise 
-
-- You can also expose your app to anywhere in the world via `npm start --tunnel`
-   - good if you wish to share your work with a co-worker, friend or client
-   - Let's try it!
-
----
-transition: slide-left
----
-
-# Expo Go Framework Overview
-
-- Expo is an Open Source React Native [framework](https://react.dev/learn/creating-a-react-app#expo)
-   - similar to how Next.js is a React Framework; Nuxt.js is a Vue Framework
-- Vanilla React Native gives us components to render text, views, scrollable lists, etc.
-- Vanilla React Native doesn't give us out of the box nav, push notifs, using camera etc.
-- Expo provides of tools and libraries that are not provided out of the box 
-- Expo Go is a small part of Expo, so it's NOT the same as Expo
-- Expo Go is a "sandbox" designed for learning, prototyping but isn't recommended when building production apps. You can't customize native code with it. It is designed to quickly get started building apps without spending time setting up your native dev env.
-- What do you use to build production mobile React Native apps?   [Development Builds](https://docs.expo.dev/develop/development-builds/introduction/)
-- We'll create 2 separate apps
-   - First four classes we'll use Expo Go
-   - Last 4 classes we'll eventually use Development Build
-
----
-transition: slide-left
----
-
-# Linting and Prettier
-
-- `npx expo lint` > choosing Yes creates `.eslint.config.js`
-- `npx expo install -- --save-dev prettier eslint-config-prettier eslint-plugin-prettier`
-- see https://docs.expo.dev/guides/using-eslint/
-   ```js
-  const { defineConfig } = require('eslint/config');
-  const expoConfig = require("eslint-config-expo/flat");
-  const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended"); // add this
-
-  module.exports = defineConfig([
-    expoConfig,
-    eslintPluginPrettierRecommended, // add this
-    {
-      ignores: ["dist/*"],
+export default function App() {
+   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+...
+  async function getAlbums() {
+    if (permissionResponse.status !== 'granted') {
+      await requestPermission();
     }
-  ]);
-   ```
-
-- goto App.tsx, notice how it uses single quotes?  Save file > should automatically change to double quotes 
-
----
-transition: slide-left
----
-
-# Components: `<View>` `<Text>`
-
-- `<View>` is like `<div>`, can have many of them, serves as a container tag for positioning and styling
-  - unlike the web, everything in react native must be wrapped by a component
-  - do NOT think of `<View>` as only one instance in existence (ex: MVC) - it's NOT that
-- `<Text>` is like `<p>`; in React Native all text must be wrapped in a `<Text>`
-   - this is because React Native will compile this appropriately to the UI elements based on the various platforms (ex: iOS, Android, etc)
-- See the errors if you:
-   1. put plain text
-   1. put a Text component outside View
-   1. use falsy values 
+    const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
+      includeSmartAlbums: true,
+    });
+    setAlbums(fetchedAlbums);
+  }
+```
 
 ---
 transition: slide-left
 ---
 
-# Inline Styles
+# Speech Recognition & Text-to-Speech
 
-- similar to css on the web except:
-   - no units; everything is display points
-   - defined as valid JS objects
-   - no CSS animations
+- `npx expo install expo-speech`
+- see https://docs.expo.dev/versions/v52.0.0/sdk/speech/
 
-## Exercise
-- Try wrapping our Text component in a View component
-   ```tsx
-   <View style={{ backgroundColor: "yellow" }}>
-      <Text>Open...</Text>
-   </View>
-   ```
-- Add some `paddingHorizontal: 8,`
-- Add some `paddingVertical: 16,`
-- Remove `alignItems: "center"`
-- Notice styling uses flexbox (also default flex direction is column)
+```tsx
+import * as Speech from 'expo-speech';
 
----
-transition: slide-left
----
+export default function App() {
+  const speak = () => {
+    const thingToSay = '1';
+    Speech.speak(thingToSay);
+  };
 
-# More Exercises
-
-- Try adding a `borderBottomColor: #123456`
-- Don't see anything?   Try adding a `bottomBorderWidth: 1`
-- ChatGPT: `in react native, when styling, I notice I'm using numberse that aren't pixels. Why?`
-- Try importing PixelRatio from 'react-native' and output it via `<Text>{PixelRatio.get()}...`
-- Let's style our Text component by
-   - adding `fontSize: 18`
-   - add `fontWeight: "200"`
+  return (
+    <View style={styles.container}>
+      <Button title="Press to hear some words" onPress={speak} />
+    </View>
+  );
+}
+```
 
 ---
 transition: slide-left
 ---
 
-# Styling Exercises
+# Sensors 
 
-- Similar to how we had `.module.css`, let's create a separate stylesheet `./theme.ts` and move our styles into it (fyi - can't have global styles in R.N.)
-   ```ts
-   export const theme = {
-      colorGreen: "#123456",
-      colorWhite: "#ffffff"
-      etc.
-   }
-   ```
-- in our `const styles = StyleSheet.create({` in addition to container, let's add:
-   - itemContainer
-   - itemText
-   ```ts
-   itemContainer: {
-      borderBottomWidth: 1,
-      borderBottomColor: "#123456",
-      paddingHorizontal: 8,
-      paddingVertical: 16,
-   },
-   itemText: {
-      fontSize: 18, fontWeight: "200"
-   }
-   ```
----
-transition: slide-left
----
-
-# Exercise: Create a Button
-
-- R.N. does come with a Button element but is hardly used because you can't customize it.  
-   - import `Button` from 'react-native' and use it:
-   `<Button title="click me" />`
-- Instead, let's import `Pressable` and `TouchableOpacity`
-   ```tsx
-   <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>Hello</Text>
-         <Pressable onPress={() => console.log('pressed')}>
-            <Text>Delete</Text>
-         </Pressable>
-   ```
-   - Try pressing the button.  Does terminal log out?
-- Replace our `<Pressable>` with `<TouchableOpacity>`
-   - Try adding prop `activeOpacity: 8` to change opacity 
-   - add `flexDirection: "row,"` in `itemContainer`
-   - add `justifyContent: "space-between",`
-   - add `alignItems: "center"`
+- `npx expo install expo-sensors`
+- See [docs](https://docs.expo.dev/versions/latest/sdk/sensors/) for available sensors:
+   - Accelerometer
+   - Barometer
+   - Device Motion
+   - Gyroscope
+   - Magnetometer
 
 ---
 transition: slide-left
 ---
 
-# Exercise: Style our Delete button
+# Geolocation
 
-- Add to our `StyleSheet.create({` another key of `button`
-- Try adding a `backgroundColor` of black to our button
-- Try change font color to white via `<Text style={styles.buttonText}>Delete</Text>` and in our `StyleSheet.create` have a `buttonText: { color: theme.colorWhite }`
-- Add some `padding`
-- Add a `borderRadius`
-- Add a `fontWeight: "bold",`
-- Add a `textTransform: "uppercase",`
-- Add `letterSpacing: 1,`
+- `npx expo install expo-location`
+- see https://docs.expo.dev/versions/latest/sdk/location/
 
----
-transition: slide-left
----
+```tsx
+import * as Location from 'expo-location';
 
-# Exercise: Adding alerts
+export default function App() {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
 
-- create a `handleDelete` function
-   ```tsx
-   const handleDelete = () => {
-      Alert.alert("Are you sure you want to delete this?")
-   }
-   ```
-   ```tsx
-   <TouchableOpacity onPress={handleDelete}>
-   ```
-- Try it
-- Try adding a second argument for subtext to `Alert.alert()`
-- Try adding a 3rd argument:
-   ```tsx
-   [
-      {
-         text: "Yes",
-         onPress: () => console.log('deleting'),
-         style: "destructive",
-      },
-      {
-         text: "Cancel",
-         style: "cancel",
+  useEffect(() => {
+    async function getCurrentLocation() {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
       }
-   ]
-   ```
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    }
+
+    getCurrentLocation();
+  }, []);
+```
+---
+transition: slide-left
+---
+
+# Network Info
+Provides access to the device's network such as its IP address, MAC address, and airplane mode status
+
+- `npx expo install expo-network`
+- see https://docs.expo.dev/versions/v52.0.0/sdk/network/
+
+## NetInfo
+allows you to get information about connection type and connection quality.
+
+- `npx expo install @react-native-community/netinfo`
+- see https://docs.expo.dev/versions/v52.0.0/sdk/netinfo/
 
 ---
 transition: slide-left
 ---
 
-# Exercise: Components
+# Maps
 
-- create a `./components/` folder
-- create `ShoppingListItem.tsx`
-   - extract our item (i.e. `<View styles={styles.itemContainer}>...</View>`) into here
-   - extract related files into it as well
-   - extract related functionality into it
-   - extract related imports
-- import ShoppingListItem into App, try copying/pasting it 3 times to see if it shows up correctly
-- okay now let's hard code 3 items via `name` prop `<ShoppingListItem name="mango">` etc
-- add related TS if needed for prop
-- modify ShoppingListemItem to display prop name
-- Try changing `handleDelete` to change sentence to "Are you sure you want to delete insert-name-here"
+- `npx expo install react-native-maps`
+- see https://docs.expo.dev/versions/latest/sdk/map-view/
+```tsx
+import MapView from 'react-native-maps';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <MapView style={styles.map} />
+    </View>
+  );
+}
+```
+
+- [Register](https://console.developers.google.com/apis) a Google Cloud API project and enable the Maps SDK
+
 
 ---
 transition: slide-left
 ---
 
-# Exercise: Scratch off ToDo Item when Completed
+# 3rd party packages
 
-- add any necessary styling as you see fit along the way
-- add another prop `isCompleted?: boolean;`
-- we want different styles if item is completed or not
-   ```tsx
-   <View style={[styles.itemContainer, isCompleted ? styles.completedContainer : undefined]}
-   ```
-- 💡 can change CompletedContainer styles to have different background colors etc.
-   - similarly add custom styles for button when completed
-   - similarly add custom styles for our item Text but use a `textDecorationLine: "line-through"` as well as any other colour changes
+- [react-native-game-engine](https://www.npmjs.com/package/react-native-game-engine)
+   - Gives you a basic game engine to build simple 2D games.
+   - Create a Flappy Bird or Pong clone
+- [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera)
+   - Access the device camera with superpowers (faster, more extensible).
+   - Make a fun camera filter app like Snapchat lenses
+- [react-native-gesture-handler](react-native-gesture-handler)
+   - Adds gesture capabilities like swipe, pinch, drag.
+- [flash-list](https://www.npmjs.com/package/@shopify/flash-list)
+   - high-performance lists (superior to FlatList for large data)
+- [lottie-react-native](https://www.npmjs.com/package/lottie-react-native)
+   - parses Adobe After Effects animations exported as JSON and renders them natively
+
+---
+transition: slide-left
+---
+
+# Confetti
+react-native-confetti-cannon
+
+- `npx expo install react-native-confetti-cannon`
+- https://www.npmjs.com/package/react-native-confetti-cannon
+
+```tsx
+import { ... Dimensions } from "react-native";
+import { ... useRef } from "react";
+import ConfettiCannon from "react-native-confetti-cannon";
+
+export default function CounterScreen() {
+   const confettiRef = useRef<any>();
+...
+confettiRef?.current?.start(); // run this perhaps in an onPress handler somewhere
+...
+<ConfettiCannon
+  ref={confettiRef}
+  count={50}
+  origin={{ x: Dimensions.get("window").width / 2, y: -30 }}
+  autoStart={false}
+  fadeOut={true}
+/>
+```
+
 
 
 ---
 layout: image-right
 transition: slide-left
-image: /assets/rn.png
-backgroundSize: 444px 380px
+image: /assets/dan.png
+backgroundSize: 444px 300px
 class: text-left
 ---
 
 # 10 minute break
 
 🍦 Cool Tips, Trends and Resources:
-- 👩‍💻 [React Native on FCC](https://www.freecodecamp.org/news/build-a-meditation-app-with-react-native-expo-router/)
-- 📄 [UI: React Native Paper](https://reactnativepaper.com/)
-- ⚛️ [UI: React Native Elements](https://reactnativeelements.com/)
-- 🧭 [React Navigation](https://reactnavigation.org/)
+- 🪏 [Why we ditched Next.js](https://northflank.com/blog/why-we-ditched-next-js-and-never-looked-back)
+- ⚡ [content-visibility: auto](https://cekrem.github.io/posts/content-visibility-auto-performance/)
+- 🎭 [React for Two Computers](https://www.youtube.com/watch?v=ozI4V_29fj4)
+- ⚛️ [JSX Over the Wire = RSC](https://overreacted.io/jsx-over-the-wire/)
+- 🍎 [new MAC setup](https://www.swyx.io/new-mac-setup)
 
 
 <br>
@@ -372,42 +326,14 @@ class: text-left
 transition: slide-left
 ---
 
-# Icon Buttons
+# Guest Speaker: Dion Tu
 
-- `npx expo install @expo/vector-icons`
-- Try picking and copying an icon appropriate for Delete button
-   - see https://icons.expo.fyi/Index
-   - Copy import statement `import AntDesign from "@expo/vector-icons/AntDesign";`
-   - Paste it in our `ShoppingListItem.tsx`
-   - Copy the Render the component
-- Replace our `<Text>Delete` component with your icon 
-   ```tsx
-   <AntDesign name="closecircle" size={24} color="theme.colorRed" />
-   ```
-   - may need to remove previous TouchableOpacity styles
-- if item is completed, change button color to be grey
+- When Dion arrives around 8:15pm EST, please turn on your cameras
+- check out his work experience: https://www.linkedin.com/in/diontu/
+- He has graciously given us 20 to 30 minutes of Q&A
+- Ask him anything 
 
 
----
-transition: slide-left
----
-
-# Emulator
-
-- When you first ran `npm start` look for options for "open Android" or "open iOS simulator"
-- Try pressing `a` for Android or `i` for iOS Simulator
-
-
----
-transition: slide-left
----
-
-# Explore Expo Examples
-
-1. `npx create-expo-app --help`
-2. Find the command that allows you to choose an Expo example via `--example` flag
-3. Pick an example to install from [this list](https://github.com/expo/examples?tab=readme-ov-file) and have fun poking around
-4. Goto Step 2 and repeat to see/modify other examples 
 
 ---
 transition: slide-left
@@ -415,5 +341,20 @@ transition: slide-left
 
 # Homework
 
-- Think about your Capstone Planning Project
-   - can submit before due date if you wish
+- Start working on your Mobile Assignment 
+- Start working on your Capstone planning project
+
+---
+transition: slide-left
+---
+
+# Lab
+Create one of the following as a react-native mobile app or choose your own idea
+
+- Maze Game: Use accelerometer to move a ball around a maze
+- Compass app: Use magnetometer to show real-time compass direction
+- Step Counter: Approximate steps based on accelerometer spikes
+- Build a voice memo app
+- Make a "soundboard" for sound effects or Build a record & playback feature
+- Create a photo booth
+- OR do at least 1 "Getting Started" from [this list](https://unit06-lesson06.netlify.app/14) or [here](https://unit04-lesson05.netlify.app/16)
