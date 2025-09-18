@@ -39,6 +39,7 @@ transition: slide-left
 # Leave a Review
 
 - https://docs.expo.dev/versions/latest/sdk/storereview/
+
 ---
 transition: slide-left
 ---
@@ -61,6 +62,22 @@ export default function App() {
 
 - [Register](https://console.developers.google.com/apis) a Google Cloud API project and enable the Maps SDK
 
+
+---
+transition: slide-left
+---
+
+# SQLite
+
+- see https://docs.expo.dev/versions/latest/sdk/sqlite/
+
+---
+transition: slide-left
+---
+
+# SMS
+
+- see https://docs.expo.dev/versions/latest/sdk/sms/
 
 ---
 transition: slide-left
