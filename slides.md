@@ -21,7 +21,7 @@ Mobile Development: Unit 08 - Lesson 07
 
 - [ ] Fetch JSON via: useEffect, RTK Query
 - [ ] Zustand
-- [ ] Continue playing with expo APIs: Maps, StoreReview, 
+- [ ] Continue playing with expo APIs: Maps, StoreReview, etc.
 
 <div class="abs-br m-6 text-xl">
   <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
