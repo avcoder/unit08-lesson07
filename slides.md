@@ -36,10 +36,14 @@ Mobile Development: Unit 08 - Lesson 07
 transition: slide-left
 ---
 
-# Fetch JSON
+# Exercise: Fetch JSON
 
-- useEffect
-- RTK Query
+- see https://thecatapi.com/ OR https://thedogapi.com/
+- use useEffect to fetch JSON and display results
+
+## Exercise 2
+
+- attempt to refactor such that we fetch via [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
 
 ---
 transition: slide-left
