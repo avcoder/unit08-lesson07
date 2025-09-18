@@ -83,6 +83,14 @@ transition: slide-left
 transition: slide-left
 ---
 
+# ImagePicker
+
+- see https://docs.expo.dev/versions/latest/sdk/imagepicker/
+
+---
+transition: slide-left
+---
+
 # 3rd party packages
 
 - [react-native-game-engine](https://www.npmjs.com/package/react-native-game-engine)
