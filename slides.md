@@ -145,9 +145,11 @@ export default function App() {
 transition: slide-left
 ---
 
-# SQLite
+# Different Ways to Store Data Locally
 
-- see https://docs.expo.dev/versions/latest/sdk/sqlite/
+- see https://docs.expo.dev/develop/user-interface/store-data/
+- SecureStore: https://docs.expo.dev/versions/latest/sdk/securestore/
+- SQLite: https://docs.expo.dev/versions/latest/sdk/sqlite/
 
 ---
 transition: slide-left
