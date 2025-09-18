@@ -32,6 +32,24 @@ Mobile Development: Unit 08 - Lesson 07
 <!--
 -->
 
+---
+transition: slide-left
+---
+
+# Fetch JSON
+
+- useEffect
+- RTK Query
+
+---
+transition: slide-left
+---
+
+# Zustand
+State Manager
+
+- see https://zustand.docs.pmnd.rs/getting-started/introduction
+
 
 ---
 layout: image-right
