@@ -32,6 +32,62 @@ Mobile Development: Unit 08 - Lesson 07
 <!--
 -->
 
+
+---
+layout: image-right
+transition: slide-left
+image: /assets/dan.png
+backgroundSize: 444px 300px
+class: text-left
+---
+
+# 10 minute break
+
+🍦 Cool Tips, Trends and Resources:
+- 🪏 [Why we ditched Next.js](https://northflank.com/blog/why-we-ditched-next-js-and-never-looked-back)
+- ⚡ [content-visibility: auto](https://cekrem.github.io/posts/content-visibility-auto-performance/)
+- 🎭 [React for Two Computers](https://www.youtube.com/watch?v=ozI4V_29fj4)
+- ⚛️ [JSX Over the Wire = RSC](https://overreacted.io/jsx-over-the-wire/)
+- 🍎 [new MAC setup](https://www.swyx.io/new-mac-setup)
+
+
+<br>
+<hr>
+<br>
+
+- 🧪 [Enter anonymous lab questions](https://docs.google.com/forms/d/e/1FAIpQLSevvGARdHQikso-uLqFCO481MABKE5HofuSrlzEPMNQ2ZLykw/viewform?usp=dialog)
+- ℹ️ [Course feedback survey](https://circuitstream.typeform.com/to/ZoyYk7px#course_id=SoftwareAN&instructor=9514)
+
+---
+transition: slide-left
+---
+
+# Confetti
+react-native-confetti-cannon
+
+- `npx expo install react-native-confetti-cannon`
+- https://www.npmjs.com/package/react-native-confetti-cannon
+
+```tsx
+import { ... Dimensions } from "react-native";
+import { ... useRef } from "react";
+import ConfettiCannon from "react-native-confetti-cannon";
+
+export default function CounterScreen() {
+   const confettiRef = useRef<any>();
+...
+confettiRef?.current?.start(); // run this perhaps in an onPress handler somewhere
+...
+<ConfettiCannon
+  ref={confettiRef}
+  count={50}
+  origin={{ x: Dimensions.get("window").width / 2, y: -30 }}
+  autoStart={false}
+  fadeOut={true}
+/>
+```
+
+
 ---
 transition: slide-left
 ---
@@ -106,73 +162,6 @@ transition: slide-left
 - [lottie-react-native](https://www.npmjs.com/package/lottie-react-native)
    - parses Adobe After Effects animations exported as JSON and renders them natively
 
----
-transition: slide-left
----
-
-# Confetti
-react-native-confetti-cannon
-
-- `npx expo install react-native-confetti-cannon`
-- https://www.npmjs.com/package/react-native-confetti-cannon
-
-```tsx
-import { ... Dimensions } from "react-native";
-import { ... useRef } from "react";
-import ConfettiCannon from "react-native-confetti-cannon";
-
-export default function CounterScreen() {
-   const confettiRef = useRef<any>();
-...
-confettiRef?.current?.start(); // run this perhaps in an onPress handler somewhere
-...
-<ConfettiCannon
-  ref={confettiRef}
-  count={50}
-  origin={{ x: Dimensions.get("window").width / 2, y: -30 }}
-  autoStart={false}
-  fadeOut={true}
-/>
-```
-
-
-
----
-layout: image-right
-transition: slide-left
-image: /assets/dan.png
-backgroundSize: 444px 300px
-class: text-left
----
-
-# 10 minute break
-
-🍦 Cool Tips, Trends and Resources:
-- 🪏 [Why we ditched Next.js](https://northflank.com/blog/why-we-ditched-next-js-and-never-looked-back)
-- ⚡ [content-visibility: auto](https://cekrem.github.io/posts/content-visibility-auto-performance/)
-- 🎭 [React for Two Computers](https://www.youtube.com/watch?v=ozI4V_29fj4)
-- ⚛️ [JSX Over the Wire = RSC](https://overreacted.io/jsx-over-the-wire/)
-- 🍎 [new MAC setup](https://www.swyx.io/new-mac-setup)
-
-
-<br>
-<hr>
-<br>
-
-- 🧪 [Enter anonymous lab questions](https://docs.google.com/forms/d/e/1FAIpQLSevvGARdHQikso-uLqFCO481MABKE5HofuSrlzEPMNQ2ZLykw/viewform?usp=dialog)
-- ℹ️ [Course feedback survey](https://circuitstream.typeform.com/to/ZoyYk7px#course_id=SoftwareAN&instructor=9514)
-
-
----
-transition: slide-left
----
-
-# Guest Speaker: Dion Tu
-
-- When Dion arrives around 8:15pm EST, please turn on your cameras
-- check out his work experience: https://www.linkedin.com/in/diontu/
-- He has graciously given us 20 to 30 minutes of Q&A
-- Ask him anything 
 
 
 
@@ -184,18 +173,3 @@ transition: slide-left
 
 - Start working on your Mobile Assignment 
 - Start working on your Capstone planning project
-
----
-transition: slide-left
----
-
-# Lab
-Create one of the following as a react-native mobile app or choose your own idea
-
-- Maze Game: Use accelerometer to move a ball around a maze
-- Compass app: Use magnetometer to show real-time compass direction
-- Step Counter: Approximate steps based on accelerometer spikes
-- Build a voice memo app
-- Make a "soundboard" for sound effects or Build a record & playback feature
-- Create a photo booth
-- OR do at least 1 "Getting Started" from [this list](https://unit06-lesson06.netlify.app/14) or [here](https://unit04-lesson05.netlify.app/16)
